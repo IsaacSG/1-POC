@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { postTarefas, getTarefas, deleteTarefa, updateTarefa } from "../Controllers/tarefasController.js";
+import { newTarefa, findTarefas, finalizarTarefa, deletarTarefa } from "../Controllers/tarefasController.js";
 import { validateTarefa } from "../Middlewares/tarefaMiddle.js";
 var router = Router();
-router.get("/tarefas", getTarefas);
-router.post("/tarefas", validateTarefa, postTarefas);
-router.put("/tarefa", updateTarefa);
-router["delete"]("/tarefas", deleteTarefa);
+router.get("/tarefas", findTarefas);
+router.post("/tarefas", validateTarefa, newTarefa);
+router.put("/tarefas/:id", finalizarTarefa);
+router["delete"]("/tarefas/:id", deletarTarefa);
 export default router;

@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { postMorador, getMoradores, deleteMorador } from "../Controllers/moradorController.js";
+import { newMorador, findMoradores, delMorador } from "../Controllers/moradorController.js";
 import { validateMorador } from "../Middlewares/moradorMiddle.js";
 var router = Router();
-router.get("/morador", getMoradores);
-router.post("/morador", validateMorador, postMorador);
-router["delete"]("/morador", deleteMorador);
+router.get("/morador", findMoradores);
+router.post("/morador", validateMorador, newMorador);
+router["delete"]("/morador/:id", delMorador);
 export default router;

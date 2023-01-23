@@ -34,97 +34,33 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import connection from "../DB/pg.js";
-export function postTarefas(req, res) {
+import { postTarefas, getTarefas, deleteTarefa, updateTarefa } from "../Repositories/tarefaRepositorie.js";
+export function newTarefa(req, res) {
+    var newTarefa = req.body;
+    postTarefas(newTarefa);
+    res.status(201).send("Nova tarefa cadastrada");
+}
+export function findTarefas(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var body, error_1;
+        var find;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    body = req.body;
-                    _a.label = 1;
+                case 0: return [4 /*yield*/, getTarefas()];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, connection.query("\n        INSERT \n        INTO tarefa (nome, descricao, dia, responsavel, status)\n        VALUES($1, $2, $3, $4, $5)\n        ", [body.nome, body.descricao, body.dia, body.responsavel, body.status])];
-                case 2:
-                    _a.sent();
-                    res.status(201).send("Nova tarefa cadastrada");
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _a.sent();
-                    console.log(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    find = _a.sent();
+                    res.status(200).send(find.rows);
+                    return [2 /*return*/];
             }
         });
     });
 }
-export function getTarefas(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var tarefas, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, connection.query("\n        SELECT *\n        FROM tarefa")];
-                case 1:
-                    tarefas = (_a.sent()).rows;
-                    res.status(200).send(tarefas);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_2 = _a.sent();
-                    console.log(error_2);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    });
+export function finalizarTarefa(req, res) {
+    var id = req.params.id;
+    updateTarefa(id);
+    res.status(200).send("Tarefa de n\u00FAmero ".concat(id, " concluida"));
 }
-export function updateTarefa(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var id, uptade, error_3;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, connection.query("\n        UPDATE tarefa \n        SET status= true\n        WHERE tarefa.id = $1\n        ", [id])];
-                case 2:
-                    uptade = _a.sent();
-                    res.status(200).send("Tarefa de n\u00FAmero ".concat(id, " concluida"));
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    console.log(error_3);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    });
-}
-export function deleteTarefa(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var id, exluir, error_4;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, connection.query("\n        DELETE\n        FROM tarefa\n        WHERE tarefa.id = $1\n        ", [id])];
-                case 2:
-                    exluir = _a.sent();
-                    res.status(200).send("Tarefa de n\u00FAmero ".concat(id, " deletada"));
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_4 = _a.sent();
-                    console.log(error_4);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    });
+export function deletarTarefa(req, res) {
+    var id = req.params.id;
+    deleteTarefa(id);
+    res.status(200).send("Tarefa de n\u00FAmero ".concat(id, " deletada"));
 }

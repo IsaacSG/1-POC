@@ -34,73 +34,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import connection from "../DB/pg.js";
-export function postMorador(req, res) {
+import { postMorador, getMoradores, deleteMorador } from "../Repositories/moradorRepositorie.js";
+export function newMorador(req, res) {
+    var newMorador = req.body;
+    postMorador(newMorador);
+    res.status(201).send("Novo morador cadastrado");
+}
+export function findMoradores(req, res) {
     return __awaiter(this, void 0, void 0, function () {
-        var body, error_1;
+        var find;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0:
-                    body = req.body;
-                    _a.label = 1;
+                case 0: return [4 /*yield*/, getMoradores()];
                 case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, connection.query("\n        INSERT \n        INTO morador (nome, telefone, quarto)\n        VALUES($1, $2, $3)\n        ", [body.nome, body.telefone, body.quarto])];
-                case 2:
-                    _a.sent();
-                    res.status(201).send("Novo morador cadastrado");
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_1 = _a.sent();
-                    console.log(error_1);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
+                    find = _a.sent();
+                    console.log(find);
+                    res.status(200).send(find.rows);
+                    return [2 /*return*/];
             }
         });
     });
 }
-export function getMoradores(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var moradores, error_2;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    _a.trys.push([0, 2, , 3]);
-                    return [4 /*yield*/, connection.query("\n        SELECT *\n        FROM morador")];
-                case 1:
-                    moradores = (_a.sent()).rows;
-                    res.status(200).send(moradores);
-                    return [3 /*break*/, 3];
-                case 2:
-                    error_2 = _a.sent();
-                    console.log(error_2);
-                    return [3 /*break*/, 3];
-                case 3: return [2 /*return*/];
-            }
-        });
-    });
-}
-export function deleteMorador(req, res) {
-    return __awaiter(this, void 0, void 0, function () {
-        var id, exluir, error_3;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    id = req.params.id;
-                    _a.label = 1;
-                case 1:
-                    _a.trys.push([1, 3, , 4]);
-                    return [4 /*yield*/, connection.query("\n        DELETE\n        FROM morador\n        WHERE morador.id = $1\n        ", [id])];
-                case 2:
-                    exluir = _a.sent();
-                    res.status(200).send("Morador de n\u00FAmero ".concat(id, " deletado"));
-                    return [3 /*break*/, 4];
-                case 3:
-                    error_3 = _a.sent();
-                    console.log(error_3);
-                    return [3 /*break*/, 4];
-                case 4: return [2 /*return*/];
-            }
-        });
-    });
+export function delMorador(req, res) {
+    var id = req.params.id;
+    deleteMorador(id);
+    res.status(200).send("Morador de n\u00FAmero ".concat(id, " deletado"));
 }

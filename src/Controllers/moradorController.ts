@@ -1,51 +1,21 @@
-import { Request, Response} from "express";
-import { QueryResult } from "pg";
-import connection from "../DB/pg.js";
+import { postMorador, getMoradores, deleteMorador } from "../Repositories/moradorRepositorie.js";
+import { Request, Response } from "express";
+import { Morador } from "../Protocols/moradorProtocol.js"
 
-export async function postMorador(req: Request, res: Response) {
-    const body = req.body;
-
-    try{
-        await connection.query(`
-        INSERT 
-        INTO morador (nome, telefone, quarto)
-        VALUES($1, $2, $3)
-        `, [body.nome, body.telefone, body.quarto]);
-
-        res.status(201).send("Novo morador cadastrado");
-    }
-    catch(error){
-        console.log(error);
-    }
+export function newMorador(req: Request, res: Response){
+    const newMorador = req.body as Morador;
+    postMorador(newMorador);
+    res.status(201).send("Novo morador cadastrado");
 }
 
-export async function getMoradores(req: Request, res: Response) {
-    
-    try{
-        const {rows: moradores} = await connection.query(`
-        SELECT *
-        FROM morador`);
-
-        res.status(200).send(moradores);
-    }
-    catch(error){
-        console.log(error);
-    }
+export async function findMoradores(req: Request, res: Response){
+    const find = await getMoradores();
+    console.log(find);
+    res.status(200).send(find.rows);
 }
 
-export async function deleteMorador(req: Request, res: Response) {
+export function delMorador(req: Request, res: Response){
     const { id } = req.params;
-
-    try{
-        const exluir = await connection.query(`
-        DELETE
-        FROM morador
-        WHERE morador.id = $1
-        `, [id]);
-
-        res.status(200).send(`Morador de número ${id} deletado`);
-    }
-    catch(error){
-        console.log(error);
-    }
+    deleteMorador(id);
+    res.status(200).send(`Morador de número ${id} deletado`);
 }
